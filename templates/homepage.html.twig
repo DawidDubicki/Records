@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona główna</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <nav class="navbar navbar-dark bg-dark d-flex justify-content-center text-light mb-3"> Records </nav>
+</head>
+<body class="bg-dark bg-gradient min-vh-100">
+<div class="container">
+    <div class="row">
+        <nav class="navbar bg-transparent text-light mb-3 d-flex space-between p-0">
+            <!-- Przycisk pokazujący tabele nośników -->
+            <button class="btn bg-dark flex-fill btn-outline-success p-2" data-bs-target="#divNosnik" data-bs-toggle="collapse">
+                Nosniki
+            </button>
+            <!-- Przycisk pokazujący tabele utworów -->
+            <button class="btn bg-dark flex-fill  btn-outline-success h-100 p-2" data-bs-toggle="collapse" data-bs-target="#divUtwory">
+                Utwory
+            </button>
+        </nav>
+        <div id="accordion">
+            <!-- Div nośników -->
+            <div class="w-100 collapse show" id="divNosnik" data-bs-parent="#accordion">
+                <!-- Przycisk otwierający formularz do dodawania nośników -->
+                <button class="w-100 p-1 pt-2 pb-2 mb-2 btn btn-outline-success bg-dark" data-bs-target="#divCreateNosnikForm" data-bs-toggle="offcanvas" > Dodaj nośnik </button>
+                <!-- Tabela nośników -->
+                <h3 class="bg-dark text-light d-flex justify-content-center p-1">Tabela Nośników</h3>
+                <table class="table table-dark table-striped table-bordered" id="tableNosnik">
+                    <thead>
+                    <tr>
+                        <th scope="col"> Id </th>
+                        <th scope="col"> Artysta </th>
+                        <th scope="col"> Tytuł </th>
+                        <th scope="col"> Nośnik </th>
+                        <th scope="col"> Rok wydania</th>
+                        <th scope="col"> Lista utworów</th>
+                        <th scope="col"> Edytuj</th>
+                        <th scope="col"> Usuń </th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbodyNosnik">
+                    </tbody>
+                </table>
+                <!-- Formularz Nośników -->
+                <div class="w-50 offcanvas p-1 bg-dark position-absolute top-50 start-50 translate-middle" id="divCreateNosnikForm">
+                    <form method="POST" class="d-flex flex-column" action="/api/nosniki/create" id="createNosnikiForm">
+                        <input class="p-1 mt-1 mb-1" name="title" placeholder="Tytuł">
+                        <input class="p-1 mt-1 mb-1" name="artist" placeholder="Artysta">
+                        <input class="p-1 mt-1 mb-1" name="releaseDate" placeholder="Rok wydania">
+                        <select class=" w-25 mt-1 mb-1" name="carrier">
+                            <option> cd </option>
+                            <option> vinyl </option>
+                            <option> mp3 </option>
+                        </select>
+                    </form>
+                    <button class="bg-light p-2 mt-1 mb-1 d-flex justify-content-center" id="buttonCreateNosnikiForm">
+                    Dodaj
+                    </button>
+                 </div>
+                <!-- Formularz do edycji nośnika -->
+                <div class="w-50 offcanvas p-1 bg-dark position-absolute top-50 start-50 translate-middle" id="divEdytujNosnikiForm">
+                    <form method="POST" id="edytujNosnikiForm" class="d-flex flex-column">
+                    </form>
+                    <button class="bg-light p-2 mt-1 mb-1 d-flex justify-content-center" id="buttonEdytujNosnikiForm">
+                        Edytuj
+                    </button>
+                </div>
+            </div>
+            <!-- Div utworów -->
+            <div class="w-100 collapse" id="divUtwory" data-bs-parent="#accordion">
+                <!-- Przycisk otwierający formularz do dodawnia utworów -->
+                <button class="w-100 p-1 pt-2 pb-2 mb-2 btn btn-outline-success bg-dark" data-bs-target="#divCreateUtworyForm" data-bs-toggle="offcanvas" > Dodaj utwór </button>
+                <!-- Tabela utworów -->
+                <h3 class="bg-dark text-light d-flex justify-content-center p-1">Tabela Utworów</h3>
+                <table class="table table-dark table-striped table-bordered" id="tableUtwory">
+                    <thead>
+                    <tr>
+                        <th scope="col"> Id </th>
+                        <th scope="col"> Tytuł utworu </th>
+                        <th scope="col"> Artysta </th>
+                        <th scope="col"> Nośnik id </th>
+                        <th scope="col"> Edytuj</th>
+                        <th scope="col"> Usuń </th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbodyUtwory">
+                    </tbody>
+                </table>
+                <!-- Formularz utworów -->
+                <div class="w-50 offcanvas p-1 bg-dark position-absolute top-50 start-50 translate-middle" id="divCreateUtworyForm">
+                    <form method="POST" class="d-flex flex-column" action="/api/utwory/create" id="createUtworyForm">
+                        <input class="p-1 mt-1 mb-1" name="id" placeholder="Id nośnika">
+                        <input class="p-1 mt-1 mb-1" name="title" placeholder="Tytuł">
+                    </form>
+                    <button class="bg-light p-2 mt-1 mb-1 d-flex justify-content-center" id="buttonCreateUtworyForm"> Dodaj </button>
+                </div>
+                <!-- Formularz do edycji utworu -->
+                <div class="w-50 offcanvas p-1 bg-dark position-absolute top-50 start-50 translate-middle" id="divEdytujUtworyForm">
+                    <form method="POST" id="edytujUtworyForm" class="d-flex flex-column">
+                    </form>
+                    <button class="bg-light p-2 mt-1 mb-1 d-flex justify-content-center" id="buttonEdytujUtworyForm">
+                        Edytuj
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    window.onload = function() {
+
+        // Zebranie danych dotyczących nośników i umieszczenie ich w tabeli nośników
+        fetch('/api/nosniki', {
+            method: 'GET',
+        }).then(response => {
+            if (response.status == 200) {
+                return response.json();
+            }
+        }).then(response => {
+            // tbody tabeli nośników
+            let target = $('#tbodyNosnik');
+            for (let object in response) {
+                // Data w postaci html
+                htmlData = '<tr>'
+                for (let key in response[object]) {
+                    if (key == 'utwory') {
+                        htmlData += '<td>'
+                        for (let utwor in response[object][key]) {
+                            utwor = parseInt(utwor)
+                            if (response[object][key][(utwor + 1)]) {
+                                htmlData += response[object][key][utwor]['tytulUtworu']
+                                htmlData += ', ';
+                            } else {
+                                htmlData += response[object][key][utwor]['tytulUtworu'];
+                            }
+                        }
+                        htmlData += '</td>'
+                    } else {
+                        htmlData += '<td>' + response[object][key] + '</td>'
+                    }
+                }
+                // przycisk do edycji danego nośnika
+                htmlData += '<td> <button class="edytujNosnik" data-id=' + response[object]['id'] + ' data-bs-toggle="offcanvas" data-bs-target="#divEdytujNosnikiForm"> Edytuj </button> </td>'
+                // przycisk do usuwania danego nośnika
+                htmlData += '<td> <button class="usunNosnik" data-id=' + response[object]['id'] + '> Usuń </button> </td>'
+                // dodanie html do tbody tabeli nośników
+                target.append(htmlData)
+            }
+        })
+
+        // Ajax wysyłający formularz tworzący nowy nośnik
+        $('#buttonCreateNosnikiForm').click(function () {
+            $.ajax({
+                url: 'api/nosniki/create',
+                method: 'POST',
+                data: $('#createNosnikiForm').serialize()
+            }).done(function () {
+                window.location.reload();
+            })
+        })
+
+        // jquery post wysyłający id nośnika do usunięcia
+        $(document.body).on('click', '.usunNosnik', function () {
+            data = {id: this.dataset.id}
+            $.post('/api/nosniki/remove', data).done(function () {
+                window.location.reload();
+            })
+        })
+
+        /// Ajax tworzący formularz edytujący nośnik
+        $(document.body).on('click', '.edytujNosnik', function () {
+            $.ajax({
+                url: '/api/nosniki',
+                method: 'POST',
+                data: {'id': this.dataset.id},
+                dataType: 'JSON'
+            }).done(function (data) {
+                htmlData = '<h3 class="d-flex justify-content-center text-light"> Edytujesz utwór o tytule: ' + data.tytul + ', ID: ' + data.id + '</h3> ' +
+                    '<input class="p-1 mt-1 mb-1" name="artist" placeholder="Artysta" value="' + data.artysta + '">' +
+                    '<input class="p-1 mt-1 mb-1" name="title" placeholder="Tytuł" value="' + data.tytul + '">' +
+                    '<input class="p-1 mt-1 mb-1" type="hidden" name="id" value="' + data.id + '">' +
+                    '<input class="p-1 mt-1 mb-1" name="releaseDate" placeholder="YYYY" value="' + data.rokWydania + '">' +
+                    '<select class=" w-25 mt-1 mb-1" name="carrier">' +
+                    '<option selected > ' + data.nosnik + '</option>' +
+                    '<option> cd </option>' +
+                    '<option> vinyl </option>' +
+                    '<option> mp3 </option>' +
+                    '</select> '
+                $('#edytujNosnikiForm').html(htmlData);
+            })
+        })
+
+        // Ajax wysyłający formularz edytujący nośnik
+        $(document.body).on('click', '#buttonEdytujNosnikiForm', function () {
+            $.ajax({
+                url: '/api/nosniki/update',
+                method: 'POST',
+                data: $('#edytujNosnikiForm').serialize()
+            }).done(function () {
+                window.location.reload();
+            })
+        })
+
+        // Ajax wysyłający formularz tworzący nowy utwór
+        $(document.body).on('click', '#buttonCreateUtworyForm', function () {
+            $.ajax({
+                url: '/api/utwory/create',
+                method: 'POST',
+                data: $('#createUtworyForm').serialize()
+            }).done(function () {
+                window.location.reload();
+            })
+        })
+
+        // Zebranie danych dotyczących utworów i umieszczenie ich w tabeli utworów
+        fetch('/api/utwory', {
+            method: 'GET',
+        }).then(response => {
+            if (response.status == 200) {
+                return response.json();
+            }
+        }).then(response => {
+            // tbody tabeli utworów
+            let target = $('#tbodyUtwory');
+            for (let object in response) {
+                // Data w postaci html
+                htmlData = '<tr>'
+                for (let key in response[object]) {
+                    if (key == 'nosnik') {
+                        htmlData += '<td>'
+                        htmlData += response[object][key]['id'];
+                        htmlData += '</td>'
+                    } else {
+                        htmlData += '<td>' + response[object][key] + '</td>'
+                    }
+                }
+                // przycisk do edycji danego utworu
+                htmlData += '<td> <button class="edytujUtwor" data-id=' + response[object]['id'] + ' data-bs-toggle="offcanvas" data-bs-target="#divEdytujUtworyForm"> Edytuj </button> </td>'
+                // przycisk do usuwania danego utworu
+                htmlData += '<td> <button class="usunUtwor" data-id=' + response[object]['id'] + '> Usuń </button> </td>'
+                // dodanie html do tbody tabeli utworu
+                target.append(htmlData)
+            }
+        })
+
+        // Ajax tworzący formularz edytujący utwór
+        $(document.body).on('click', '.edytujUtwor', function () {
+            $.ajax({
+                url: '/api/utwory',
+                method: 'POST',
+                data: {'id': this.dataset.id},
+                dataType: 'JSON'
+            }).done(function (data) {
+                htmlData = '<h3 class="d-flex justify-content-center text-light"> Edytujesz utwór o tytule: ' + data.tytulUtworu + ', ID: ' + data.id + '</h3> <input class="p-1 mt-1 mb-1" name="title" placeholder="Tytuł" value="' + data.tytulUtworu + '">' +
+                    '<input class="p-1 mt-1 mb-1" type="hidden" name="id" value="' + data.id + '">' +
+                    '<input class="p-1 mt-1 mb-1" name="carrier_id" placeholder="id_nośnika" value="' + data.nosnik['id'] + '">'
+                    $('#edytujUtworyForm').html(htmlData);
+            })
+        })
+
+        // jquery post wysyłający id utworu do usunięcia
+        $(document.body).on('click', '.usunUtwor', function () {
+            data = {id: this.dataset.id}
+            $.post('/api/utwory/remove', data).done(function () {
+                window.location.reload();
+            })
+        })
+
+        // Ajax wysyłający formularz edytujący utwór
+        $(document.body).on('click', '#buttonEdytujUtworyForm', function () {
+            $.ajax({
+                url: '/api/utwory/update',
+                method: 'POST',
+                data: $('#edytujUtworyForm').serialize()
+            }).done(function () {
+                window.location.reload();
+            })
+        })
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</body>
+</html>
